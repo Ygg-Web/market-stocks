@@ -1,25 +1,25 @@
 # market-stocks
-Приложение: Покурпка и продажа акций
+Приложение: Покупка и продажа акций
 
-###Install Backend
+### Install Backend
 ```
 cd backend
 npm install
 ```
 
-###Install Frontend
+### Install Frontend
 ```
 cd frontend
 npm install
 ```
 
-###Run Backend
+### Run Backend
 ```
 cd backend
 npm run start
 ```
 
-###Run Frontend
+### Run Frontend
 ```
 
 ```

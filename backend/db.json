@@ -1,0 +1,159 @@
+{
+  "users": [
+    {
+      "id": 0,
+      "name": "Петров П.П.",
+      "login": "petrov",
+      "balance": 20,
+      "profit": 0,
+      "stocks": [
+        {
+          "id": 0,
+          "count": 14,
+          "name": ""
+        },
+        {
+          "id": 1,
+          "count": 8,
+          "name": ""
+        },
+        {
+          "id": 2,
+          "count": 5,
+          "name": ""
+        },
+        {
+          "id": 3,
+          "count": 5,
+          "name": ""
+        },
+        {
+          "id": 4,
+          "count": 3,
+          "name": ""
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Иванов И.И.",
+      "login": "ivanov",
+      "balance": 1500,
+      "profit": 0,
+      "stocks": [
+        {
+          "id": 0,
+          "count": 5,
+          "name": ""
+        },
+        {
+          "id": 1,
+          "count": 5,
+          "name": ""
+        },
+        {
+          "id": 2,
+          "count": 10,
+          "name": ""
+        },
+        {
+          "id": 3,
+          "count": 10,
+          "name": ""
+        },
+        {
+          "id": 4,
+          "count": 5,
+          "name": ""
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Смирнов С.С.",
+      "login": "smirnov",
+      "balance": 2000,
+      "profit": 0,
+      "stocks": [
+        {
+          "id": 0,
+          "count": 0,
+          "name": ""
+        },
+        {
+          "id": 1,
+          "count": 10,
+          "name": ""
+        },
+        {
+          "id": 2,
+          "count": 15,
+          "name": ""
+        },
+        {
+          "id": 3,
+          "count": 15,
+          "name": ""
+        },
+        {
+          "id": 4,
+          "count": 0,
+          "name": ""
+        }
+      ]
+    }
+  ],
+  "stocks": [
+    {
+      "id": 0,
+      "name": "Yandex",
+      "price": 49,
+      "count": 56,
+      "stepChange": 35,
+      "historyPrice": [],
+      "historyTime": []
+    },
+    {
+      "id": 1,
+      "name": "Газпром",
+      "price": 10,
+      "count": 67,
+      "stepChange": 15,
+      "historyPrice": [],
+      "historyTime": []
+    },
+    {
+      "id": 2,
+      "name": "АЛРОСА",
+      "price": 13,
+      "count": 55,
+      "stepChange": 20,
+      "historyPrice": [],
+      "historyTime": []
+    },
+    {
+      "id": 3,
+      "name": "ВТБ",
+      "price": 32,
+      "count": 40,
+      "stepChange": 35,
+      "historyPrice": [],
+      "historyTime": []
+    },
+    {
+      "id": 4,
+      "name": "Сбербанк",
+      "price": 25,
+      "count": 42,
+      "stepChange": 25,
+      "historyPrice": [],
+      "historyTime": []
+    }
+  ],
+  "settings": {
+    "dateStart": "2022-06-15T13:07",
+    "dateEnd": "2022-06-29T23:28",
+    "interval": 6,
+    "status": "start"
+  }
+}
