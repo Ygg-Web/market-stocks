@@ -21,8 +21,6 @@ npm run start
 
 ### Run Frontend
 ```
-
-```
 cd frontend
 npm run serve
 ```
