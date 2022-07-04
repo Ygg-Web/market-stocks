@@ -57,7 +57,7 @@
           const dateMounth = new Date(2592000000).getTime();
           if (dateSet > dateCurrent && dateDif < dateMounth) { 
             const  endTime = {
-              interval: parseInt(this.interval),
+              interval: Number(this.interval),
               dateEnd: this.date
             }
             console.log(endTime);

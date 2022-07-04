@@ -48,11 +48,11 @@
     },
   })
   export default class extends Vue {
-    @Prop(Array) stocks: IStock[];
-    @Prop(Number) userBalance: number;
-    @Prop(String) type: string;
-    @Prop(Function) onSell: void;
-    @Prop(Function) onBuy: void;
+    @Prop(Array) stocks!: IStock[];
+    @Prop(Number) userBalance!: number;
+    @Prop(String) type!: string;
+    @Prop(Function) onSell!: void;
+    @Prop(Function) onBuy!: void;
     
     filedNames: string[] = ["name", "count", "price"];
 
@@ -60,7 +60,7 @@
       this.type === "sell" && this.filedNames.push("profit");
     }
 
-    fields(field: string): string {
+    fields(field: string): string | void {
       switch (field) {
         case "name":
           return " ";

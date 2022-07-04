@@ -1,8 +1,8 @@
-import { Module } from "vuex";
-import { MarketState } from "@/types";
-import { getters } from "./getters";
-import { mutations } from "./mutations";
-import { actions } from "./actions";
+import { Module } from 'vuex';
+import { MarketState } from '@/types';
+import { getters } from './getters';
+import { mutations } from './mutations';
+import { actions } from './actions';
 
 const state: MarketState = {
   users: [],

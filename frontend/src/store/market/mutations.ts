@@ -5,8 +5,8 @@ import {
   ITrade,
   IUser,
   ISetDate,
-} from "@/types";
-import { MutationTree } from "vuex";
+} from '@/types';
+import { MutationTree } from 'vuex';
 
 export const mutations: MutationTree<MarketState> = {
   SET_USERS(state, users: IUser[]) {
@@ -45,7 +45,7 @@ export const mutations: MutationTree<MarketState> = {
   CHANGE_PRICE_STOCKS(state, stocks: IStock[]) {
     state.stocks.map((stock: IStock) => {
       // let date = new Date().toLocaleDateString();
-      let time = new Date().toLocaleTimeString();
+      const time = new Date().toLocaleTimeString();
       stock.historyTime!.push(time);
       stock.historyPrice!.push(stocks[stock.id].price!);
       stock.price = stocks[stock.id].price;

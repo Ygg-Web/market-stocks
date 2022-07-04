@@ -56,32 +56,32 @@
     },
   })
   export default class extends Vue {
-    @Action("market/fetchUsersDB") fetchUsersDB: Promise<void>;
-    @Action("market/fetchStocksDB") fetchStocksDB: Promise<void>;
-    @Action("market/fetchSettingsDB") fetchSettingsDB: Promise<void>;
-    @Getter("market/getAllUsers") getAllUsers: IUser[];
-    @Getter("market/getAllStocks") getAllStocks: IStock[];
-    @Getter("market/getSettings") getSettings: ISettings;
+    @Action("market/fetchUsersDB") fetchUsersDB!: Promise<void>;
+    @Action("market/fetchStocksDB") fetchStocksDB!: Promise<void>;
+    @Action("market/fetchSettingsDB") fetchSettingsDB!: Promise<void>;
+    @Getter("market/getAllUsers") getAllUsers!: IUser[];
+    @Getter("market/getAllStocks") getAllStocks!: IStock[];
+    @Getter("market/getSettings") getSettings!: ISettings;
 
     change: number = 0;
     loading: boolean = true;
 
     async mounted() {
-      await this.fetchUsersDB();
-      await this.fetchStocksDB();
-      await this.fetchSettingsDB();
-      this.loading = false
+      await (< any >this).fetchUsersDB();
+      await (< any >this).fetchStocksDB();
+      await (< any >this).fetchSettingsDB();
+      this.loading = false;
     }
 
     onStartClick(event: ISetDate): void {
-      this.$socket.emit("start", event);
+      (< any >this).$socket.emit("start", event);
     }
 
     onEndClick(): void {
-      this.$socket.emit("end");
+      (< any >this).$socket.emit("end");
     }
 
-    get updateUsers(): IUser[] {
+    get updateUsers(): IUser[] | void {
      if(this.getAllUsers){
       let users = this.getAllUsers.map((user: IUser) => {
         user.stocks
@@ -97,7 +97,7 @@
     }
 
     get timeEndTrade(): string {
-     return `${new Date(this.getSettings.dateEnd).toLocaleDateString()}:${new Date(this.getSettings.dateEnd).toLocaleTimeString()}`
+     return `${new Date(this.getSettings.dateEnd!).toLocaleDateString()}:${new Date(this.getSettings.dateEnd!).toLocaleTimeString()}`
     }
   }
 </script>

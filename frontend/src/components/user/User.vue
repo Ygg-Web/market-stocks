@@ -65,12 +65,12 @@
     },
   })
   export default class extends Vue {
-    @Action("market/fetchUsersDB") fetchUsersDB: void;
-    @Action("market/fetchStocksDB") fetchStocksDB: void;
-    @Action("market/fetchSettingsDB") fetchSettingsDB: void;
-    @Getter("market/getAllUsers") getAllUsers: IUser[];
-    @Getter("market/getAllStocks") getAllStocks: IStock[];
-    @Getter("market/getSettings") getSettings: ISettings;
+    @Action("market/fetchUsersDB") fetchUsersDB!: Promise<void>;
+    @Action("market/fetchStocksDB") fetchStocksDB!: Promise<void>;
+    @Action("market/fetchSettingsDB") fetchSettingsDB!: Promise<void>;
+    @Getter("market/getAllUsers") getAllUsers!: IUser[];
+    @Getter("market/getAllStocks") getAllStocks!: IStock[];
+    @Getter("market/getSettings") getSettings!: ISettings;
 
     userId: number = 0;
     loading: boolean = true;
@@ -79,9 +79,9 @@
 
     async mounted() {
       this.userId = +this.$route.params.id - 1;
-      await this.fetchUsersDB();
-      await this.fetchStocksDB();
-      await this.fetchSettingsDB();
+      await (<any>this).fetchUsersDB();
+      await (<any>this).fetchStocksDB();
+      await (<any>this).fetchSettingsDB();
       this.loading = false;
       this.timerDate();
     }
@@ -97,7 +97,7 @@
         count: event.count,
         price: this.getAllStocks[event.stockId].price,
       };
-      this.$socket.emit("buy", trade);
+      (<any>this).$socket.emit("buy", trade);
     }
 
     onSell(event: ITrade): void {
@@ -107,7 +107,7 @@
         count: event.count,
         price: event.price
       };
-      this.$socket.emit("sell", trade);
+      (<any>this).$socket.emit("sell", trade);
     }
 
     getParseDate( value: string | null = null ): string {
@@ -120,14 +120,14 @@
     timerDate(): void {
       this.interval = setInterval(()=>{
         this.dateCurrent = this.getParseDate();
-      }, 1000)
+      }, 1000);
     }
 
     clearTimerDate(): void {
       clearInterval(this.interval)
     }
 
-    get stocksFilterForSell(): IStock[] {
+    get stocksFilterForSell(): IStock[] | void {
       if (this.getAllUsers) {
         const user = this.getAllUsers[this.userId];
         const userStocks = user.stocks
@@ -141,7 +141,7 @@
       }
     }
 
-    get stocksFilterForBuy(): IStock[] {
+    get stocksFilterForBuy(): IStock[] | void {
       if (this.getAllStocks) {
         const stocks = this.getAllStocks
           .filter((stock: IStock) => stock.count > 0)
@@ -153,8 +153,8 @@
       }
     }
 
-    get timeEndTrade(): string {
-      return this.getParseDate(this.getSettings.dateEnd)
+    get timeEndTrade(): string | void {
+      return this.getParseDate(this.getSettings.dateEnd);
     }
 
   }

@@ -38,8 +38,8 @@
 
   @Component
   export default class extends Vue {
-    @Prop(Array) historyPrice: [];
-    @Prop(Array) historyTime: [];
+    @Prop(Array) historyPrice!: [];
+    @Prop(Array) historyTime!: [];
     
     chartDate: {} = {};
 

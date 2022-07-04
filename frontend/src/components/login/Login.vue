@@ -21,23 +21,23 @@
 <script lang="ts">
   import { IUser } from '@/types';
   import { Component, Vue } from 'vue-property-decorator';
-  import { Action, Getter } from "vuex-class";
+  import { Action, Getter } from 'vuex-class';
 
   @Component
   export default class extends Vue {
-    @Action('market/fetchUsersDB') fetchUsersDB: Promise<void>;
-    @Action("market/fetchStocksDB") fetchStocksDB: Promise<void>;
-    @Getter('market/getAllUsers') getAllUsers: IUser[];
+    @Action('market/fetchUsersDB') fetchUsersDB!: Promise<void>;
+    @Action('market/fetchStocksDB') fetchStocksDB!: Promise<void>;
+    @Getter('market/getAllUsers') getAllUsers!: IUser[];
 
     users: string[] = ["admin"]
     selectedUser: string = ''
     loading = true
 
     async mounted() {
-      await this.fetchUsersDB()
-      await this.fetchStocksDB()
-      this.loading = false
-      this.updateUsers()
+      await (<any>this).fetchUsersDB();
+      await (<any>this).fetchStocksDB();
+      this.loading = false;
+      this.updateUsers();
     }
 
     updateUsers(): void {
@@ -59,7 +59,7 @@
       } else if (!userIn) {
         alert('Логин введен неправильно!')
       } else {
-        this.$router.push({name: "user", params: {id: userId}})
+        (<any>this).$router.push({name: "user", params: {id: userId}})
       }
     }
 

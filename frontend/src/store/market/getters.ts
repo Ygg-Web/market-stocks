@@ -1,5 +1,5 @@
-import { MarketState, ISettings, IStock, IUser } from "@/types";
-import { GetterTree } from "vuex";
+import { MarketState, ISettings, IStock, IUser } from '@/types';
+import { GetterTree } from 'vuex';
 
 export const getters: GetterTree<MarketState, any> = {
   getAllUsers(state): IUser[] {

@@ -34,13 +34,13 @@
 
   @Component
   export default class extends Vue {
-    @Prop(String) type: string;
-    @Prop(Function) onSell: void;
-    @Prop(Function) onBuy: void;
-    @Prop(Number) max: number;
-    @Prop(Number) stockId: number;
-    @Prop(Number) price: number;
-    @Prop(Number) userBalance: number;
+    @Prop(String) type!: string;
+    @Prop(Function) onSell!: void;
+    @Prop(Function) onBuy!: void;
+    @Prop(Number) max!: number;
+    @Prop(Number) stockId!: number;
+    @Prop(Number) price!: number;
+    @Prop(Number) userBalance!: number;
 
     open: boolean = false;
     count: number | null  = null;
@@ -54,7 +54,7 @@
     }
 
     handleStart() {
-      const count = parseInt(this.count);
+      const count = Number(this.count);
       if (count > this.max || count <= 0) {
           alert(`Количество акций должно быть меньше ${this.max + 1} и больше 0`);
       } else if ( this.type === 'buy') {
