@@ -1,161 +1,168 @@
 <template>
   <div>
-    <div v-if="loading" class="text-h5 text-center">Загрузка страницы...</div>
-    <div v-else="!loading">
-      <h1 class="text-md-center">Страница брокера</h1>
-      <v-card class="pa-5 mt-5 mb-5" color="#FAFAFA">
-        <v-card-title class="pa-0 pb-3 text-h5 justify-center font-weight-bold">Данные брокера:</v-card-title>
-        <v-card-text class="pa-0 " style="font-size: 16px;">
-          <v-list-item>
-            Брокер:
-            <span class="text-decoration-underline">
-              {{ getAllUsers[userId].name }}</span>
-          </v-list-item>
-        </v-card-text>
-        <v-card-text class="pa-0" style="font-size: 16px;" >
-          <v-list-item>
-            Баланс:
-            <span class="text-decoration-underline">{{  getAllUsers[userId].balance }}$</span>
-          </v-list-item>
-        </v-card-text>
-        <v-card-text class="pa-0" style="font-size: 16px;" >
-          <v-list-item>
-            Доходность(↑↓):
-            <span class="text-decoration-underline">{{  getAllUsers[userId].profit ? getAllUsers[userId].profit : '...'  }}$</span>
-          </v-list-item>
-        </v-card-text>
-      </v-card>
-      <v-divider></v-divider>
-      <v-card class="pa-5 mt-5 mb-5" color="#FAFAFA" >
-        <v-card-title class="text-h5 justify-center font-weight-bold">
-          Текущий портфель акций:
-        </v-card-title>
-        <TableStocks type="sell" :stocks="stocksFilterForSell" @onSell="onSell" />
-      </v-card>
-      <v-divider></v-divider>
-      <v-card class="pa-5 mt-5 mb-5" color="#FAFAFA">
-        <v-layout align-center jusstify-center column class="pa-2">
-          <h4>Текущая дата: {{dateCurrent}}</h4>
-          <h4 v-if="getSettings.status === 'start'">Торги будут завершены: {{timeEndTrade}}</h4>
-          <h4 v-else-if="getSettings.status === 'end'">Торги окончены</h4>
-        </v-layout>
-        <v-divider></v-divider>
-        <v-card-title class="text-h5 justify-center font-weight-bold">
-          Биржа
-        </v-card-title>
-        <v-card-subtitle class="justify-center d-flex mb-1 pa-2" style="font-size: 16px;">
-          Акции доступные для покупки
-        </v-card-subtitle>
-        <TableStocks v-if="getSettings.status ==='start'" type="buy" :stocks="stocksFilterForBuy" @onBuy="onBuy" :userBalance="getAllUsers[userId].balance"/>
-        <h5 v-else-if="getSettings.status =='end'" class="text-center text-h6">Биржа закрыта, торги прекращены</h5>
-      </v-card>
+    <div v-if='loading === true' class='text-center'>Загрузка страницы...</div>
+    <div v-else='loading === false'>
+      <div class='user_header'>
+        <div class='mx-2'><b>Данные брокера:</b></div>
+        <div class='mr-2 my-2'><u>Брокер:</u> {{getAllUsers[userId].name}}</div>
+        <div class='mr-2'><u>Баланс:</u> {{ getAllUsers[userId].balance }} $</div>
+        <div class='mr-2'><u>Доходность(↑↓):</u> {{getAllUsers[userId].profit ? getAllUsers[userId].profit : '...'}} $</div>
+      </div>
+      <div class='user'>
+        <div class="pa-2">
+          <div>Текущая дата: {{ dateCurrent }}</div>
+          <div v-if="getSettings.status === 'start'">Торги будут завершены: {{ timeEndTrade }}</div>
+          <div v-else-if="getSettings.status === 'end'">Торги окончены</div>
+        </div>
+        <div>
+          <h3 class='text-center mt-2'>Текущий портфель акций:</h3>
+          <TableStocks
+              type="sell"
+              :stocks="stocksFilterForSell"
+              @onSell="onSell"
+          ></TableStocks>
+        </div>
+        <div>
+          <h3 class='text-center mt-2'>Биржа</h3>
+          <div class='text-center mt-2'>Акции доступные для покупки</div>
+          <TableStocks
+              v-if="getSettings.status === 'start'"
+              type="buy"
+              :stocks="stocksFilterForBuy"
+              @onBuy="onBuy"
+              :userBalance="getAllUsers[userId].balance"
+          ></TableStocks>
+          <div
+              v-else-if="getSettings.status == 'end'" 
+              class='text-center mt-2'
+          >Биржа закрыта, торги прекращены</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { ISettings, IStock, ITrade, IUser } from "@/types";
-  import { Component,Vue } from "vue-property-decorator";
-  import { Action, Getter } from "vuex-class";
-  import TableStocks from "./TableStocks.vue";
+import { ISettings, IStock, ITrade, IUser } from '@/types'
+import { Component, Vue } from 'vue-property-decorator'
+import { Action, Getter } from 'vuex-class'
+import TableStocks from './TableStocks.vue'
 
-  @Component({
-    components: {
-      TableStocks,
-    },
-  })
-  export default class extends Vue {
-    @Action("market/fetchUsersDB") fetchUsersDB!: Promise<void>;
-    @Action("market/fetchStocksDB") fetchStocksDB!: Promise<void>;
-    @Action("market/fetchSettingsDB") fetchSettingsDB!: Promise<void>;
-    @Getter("market/getAllUsers") getAllUsers!: IUser[];
-    @Getter("market/getAllStocks") getAllStocks!: IStock[];
-    @Getter("market/getSettings") getSettings!: ISettings;
+@Component({
+  components: {
+    TableStocks,
+  },
+})
+export default class extends Vue {
+  @Action('market/fetchUsersDB') fetchUsersDB!: Promise<void>
+  @Action('market/fetchStocksDB') fetchStocksDB!: Promise<void>
+  @Action('market/fetchSettingsDB') fetchSettingsDB!: Promise<void>
+  @Getter('market/getAllUsers') getAllUsers!: IUser[]
+  @Getter('market/getAllStocks') getAllStocks!: IStock[]
+  @Getter('market/getSettings') getSettings!: ISettings
 
-    userId: number = 0;
-    loading: boolean = true;
-    interval: any;
-    dateCurrent: string = '';
+  userId: number = 0
+  loading: boolean = true
+  interval: any
+  dateCurrent: string = ''
 
-    async mounted() {
-      this.userId = +this.$route.params.id - 1;
-      await (<any>this).fetchUsersDB();
-      await (<any>this).fetchStocksDB();
-      await (<any>this).fetchSettingsDB();
-      this.loading = false;
-      this.timerDate();
-    }
-
-    unmounted(){
-      this.clearTimerDate()
-    }
-
-    onBuy(event: ITrade): void {
-      const trade = {
-        buyerId: this.userId,
-        stockId: event.stockId,
-        count: event.count,
-        price: this.getAllStocks[event.stockId].price,
-      };
-      (<any>this).$socket.emit("buy", trade);
-    }
-
-    onSell(event: ITrade): void {
-      const trade = {
-        sellerId: this.userId,
-        stockId: event.stockId,
-        count: event.count,
-        price: event.price
-      };
-      (<any>this).$socket.emit("sell", trade);
-    }
-
-    getParseDate( value: string | null = null ): string {
-      const d = value ? new Date(value) : new Date();
-      const date = d.toLocaleDateString();
-      const time = d.toLocaleTimeString();
-      return `${date}:${time}`;
-    }
-
-    timerDate(): void {
-      this.interval = setInterval(()=>{
-        this.dateCurrent = this.getParseDate();
-      }, 1000);
-    }
-
-    clearTimerDate(): void {
-      clearInterval(this.interval)
-    }
-
-    get stocksFilterForSell(): IStock[] | void {
-      if (this.getAllUsers) {
-        const user = this.getAllUsers[this.userId];
-        const userStocks = user.stocks
-          .filter((stock: IStock) => stock.count > 0)
-          .map((stock: IStock) => {
-             stock.name = this.getAllStocks[stock.id].name;
-             stock.price = this.getAllStocks[stock.id].price;
-            return stock;
-          });
-        return userStocks;
-      }
-    }
-
-    get stocksFilterForBuy(): IStock[] | void {
-      if (this.getAllStocks) {
-        const stocks = this.getAllStocks
-          .filter((stock: IStock) => stock.count > 0)
-          // .map((stock: IStock) => {
-          //   stock.price = stock.price;
-          //   return stock;
-          // });
-        return stocks;
-      }
-    }
-
-    get timeEndTrade(): string | void {
-      return this.getParseDate(this.getSettings.dateEnd);
-    }
-
+  async mounted() {
+    this.userId = +this.$route.params.id - 1
+    await (<any>this).fetchUsersDB()
+    await (<any>this).fetchStocksDB()
+    await (<any>this).fetchSettingsDB()
+    this.loading = false
+    this.timerDate()
   }
+
+  unmounted() {
+    this.clearTimerDate()
+  }
+
+  onBuy(event: ITrade): void {
+    const trade = {
+      buyerId: this.userId,
+      stockId: event.stockId,
+      count: event.count,
+      price: this.getAllStocks[event.stockId].price,
+    };
+    (<any>this).$socket.emit('buy', trade)
+  }
+
+  onSell(event: ITrade): void {
+    const trade = {
+      sellerId: this.userId,
+      stockId: event.stockId,
+      count: event.count,
+      price: event.price,
+    };
+    (<any>this).$socket.emit('sell', trade)
+  }
+
+  getParseDate(value: string | null = null): string {
+    const d = value ? new Date(value) : new Date()
+    const date = d.toLocaleDateString()
+    const time = d.toLocaleTimeString()
+    return `${date}:${time}`
+  }
+
+  timerDate(): void {
+    this.interval = setInterval(() => {
+      this.dateCurrent = this.getParseDate()
+    }, 1000)
+  }
+
+  clearTimerDate(): void {
+    clearInterval(this.interval)
+  }
+
+  get stocksFilterForSell(): IStock[] | void {
+    if (this.getAllUsers) {
+      const user = this.getAllUsers[this.userId]
+      const userStocks = user.stocks
+        .filter((stock: IStock) => stock.count > 0)
+        .map((stock: IStock) => {
+          stock.name = this.getAllStocks[stock.id].name
+          stock.price = this.getAllStocks[stock.id].price
+          return stock
+        })
+      return userStocks
+    }
+  }
+
+  get stocksFilterForBuy(): IStock[] | void {
+    if (this.getAllStocks) {
+      const stocks = this.getAllStocks.filter(
+        (stock: IStock) => stock.count > 0
+      );
+      // .map((stock: IStock) => {
+      //   stock.price = stock.price;
+      //   return stock;
+      // });
+      return stocks
+    }
+  }
+
+  get timeEndTrade(): string | void {
+    return this.getParseDate(this.getSettings.dateEnd)
+  }
+}
 </script>
+<style>
+  .user{
+    padding-top: 50px;
+    font-size: 16px;
+  }
+  .user_header{
+    position: fixed;
+    width: 100%;
+    top: 0%;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 100;
+    font-size: 16px;
+  }  
+</style>

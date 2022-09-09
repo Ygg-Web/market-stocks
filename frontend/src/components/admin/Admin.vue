@@ -1,103 +1,125 @@
 <template>
   <div>
-    <div v-if="loading" class="text-h5 text-center">Загрузка страницы...</div>
-    <div v-else="!loading">
-      <h1 class="text-md-center mb-10">Панель андминистратора</h1>
-      <h3 class="mb-5">Таблица пользователей:</h3>
-      <v-card style="width: 100%;" color="#FAFAFA" class="pa-3 d-flex flex-wrap">
-        <v-card v-for="user in updateUsers" :key="user.id" class="ma-3" max-width="300">
-          <v-card-title class="justify-center pb-0 font-weight-bold">
-            {{ user.name }}
-          </v-card-title>
-          <v-list-item>
-            <v-card-text class="p-0">
-              <v-list-item-content>
-                <v-list-item-title>Логин: <span>{{ user.login }}</span></v-list-item-title>
-                <v-list-item-title>Баланс: <span>{{ user.balance }} $</span></v-list-item-title>
-                <v-list-item-title>Доходность(↑↓): <span>{{ user.profit ? user.profit : '...' }} $</span></v-list-item-title>
-                <v-list-item-title class="text-md-center ma-2 text-decoration-underline">Обладает акциями:</v-list-item-title>
-                <v-list-item-title v-for="stock in user.stocks.filter(
-                    (stock) => stock.count > 0
-                  )">
-                  {{ stock.name }}: <span>{{ stock.count }} шт.</span>
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-card-text>
-          </v-list-item>
-        </v-card>
-      </v-card>
-      <h3 class="mb-5 mt-5">Управление торгами:</h3>
-      <v-card color="#FAFAFA" class="pa-3">
-        <v-layout align-center justify-center column>
-          <h4 v-if="getSettings.status === 'end'">Торги окончены</h4>
-          <h4 v-else-if="getSettings.status === 'start'">Торги будут завершены: {{timeEndTrade}}</h4>
-        </v-layout>
-        <v-divider></v-divider>
-        <v-layout align-center justify-center column class="pt-5">
-          <DialogStart @onStartClick="onStartClick" />
-          <v-btn class="ma-5" color="error" min-width="300px" @click="onEndClick">
-            Конец торгов
-          </v-btn>
-       </v-layout>
-      </v-card>
+    <div v-if='loading === true' class='text-center'>Загрузка страницы...</div>
+    <div v-else='loading === false' class='admin'>
+      <h3 class='text-center mt-2'>Панель андминистратора</h3>
+      <div class='text-center mb-2'>Таблица пользователей:</div>
+      <table-users
+          :users='updateUsers'
+      ></table-users>
+      <div class='admin_header'>
+        <div class='admin_info'><b>Управление торгами:</b></div>
+        <div class='admin_info'>
+          <div v-if="getSettings.status === 'end'">Торги окончены</div>
+          <div v-else-if="getSettings.status === 'start'">Торги будут завершены: {{timeEndTrade}}</div>
+        </div>
+        <div class='admin_controllers'>
+          <DialogStart 
+              @onStartClick='onStartClick'
+          ></DialogStart>
+          <v-btn
+              class='admin_button'
+              color='error'
+              @click='onEndClick'
+          >Конец торгов</v-btn>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { ISettings, IStock, IUser, ISetDate } from "@/types";
-  import { Component, Vue } from "vue-property-decorator";
-  import { Action, Getter } from "vuex-class";
-  import DialogStart from "./DialogStart.vue";
+import { ISettings, IStock, IUser, ISetDate } from '@/types'
+import { Component, Vue } from 'vue-property-decorator'
+import { Action, Getter } from 'vuex-class'
+import DialogStart from './DialogStart.vue'
+import TableUsers from './TableUsers.vue'
 
-  @Component({
-    components: {
-      DialogStart,
-    },
-  })
-  export default class extends Vue {
-    @Action("market/fetchUsersDB") fetchUsersDB!: Promise<void>;
-    @Action("market/fetchStocksDB") fetchStocksDB!: Promise<void>;
-    @Action("market/fetchSettingsDB") fetchSettingsDB!: Promise<void>;
-    @Getter("market/getAllUsers") getAllUsers!: IUser[];
-    @Getter("market/getAllStocks") getAllStocks!: IStock[];
-    @Getter("market/getSettings") getSettings!: ISettings;
+@Component({
+  components: {
+    DialogStart,
+    'table-users': TableUsers
+  },
+})
+export default class extends Vue {
+  @Action('market/fetchUsersDB') fetchUsersDB!: Promise<void>
+  @Action('market/fetchStocksDB') fetchStocksDB!: Promise<void>
+  @Action('market/fetchSettingsDB') fetchSettingsDB!: Promise<void>
+  @Getter('market/getAllUsers') getAllUsers!: IUser[]
+  @Getter('market/getAllStocks') getAllStocks!: IStock[]
+  @Getter('market/getSettings') getSettings!: ISettings
 
-    change: number = 0;
-    loading: boolean = true;
+  
+  change: number = 0
+  loading: boolean = true
 
-    async mounted() {
-      await (< any >this).fetchUsersDB();
-      await (< any >this).fetchStocksDB();
-      await (< any >this).fetchSettingsDB();
-      this.loading = false;
-    }
+  async created() {
+    await (<any>this).fetchUsersDB()
+    await (<any>this).fetchStocksDB()
+    await (<any>this).fetchSettingsDB()
+    this.loading = false
 
-    onStartClick(event: ISetDate): void {
-      (< any >this).$socket.emit("start", event);
-    }
+  }
 
-    onEndClick(): void {
-      (< any >this).$socket.emit("end");
-    }
+  onStartClick(event: ISetDate): void {
+    (<any>this).$socket.emit('start', event)
+  }
 
-    get updateUsers(): IUser[] | void {
-     if(this.getAllUsers){
+  onEndClick(): void {
+    (<any>this).$socket.emit('end')
+  }
+
+  get updateUsers(): IUser[] | void {
+    if (this.getAllUsers) {
       let users = this.getAllUsers.map((user: IUser) => {
         user.stocks
           .filter((stock: IStock) => stock.count > 0)
           .map((stock: IStock) => {
-            stock.name = this.getAllStocks[stock.id].name;
-            return stock;
-          });
-        return user;
-      });
-      return users;
-     }
-    }
-
-    get timeEndTrade(): string {
-     return `${new Date(this.getSettings.dateEnd!).toLocaleDateString()}:${new Date(this.getSettings.dateEnd!).toLocaleTimeString()}`
+            stock.name = this.getAllStocks[stock.id].name
+            return stock
+          })
+        return user
+      })
+      return users
     }
   }
+
+  get timeEndTrade(): string {
+    return `${new Date(
+      this.getSettings.dateEnd!).toLocaleDateString()}:${new Date(this.getSettings.dateEnd!).toLocaleTimeString()}`
+  }
+}
 </script>
+<style scoped>
+  .admin{
+    padding-top: 50px;
+    font-size: 16px;
+  }
+  .admin_header{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: flex-start;
+    z-index: 100;
+  }
+  .admin_controllers{
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+  }
+  .admin_button{
+    margin: 0 10px;
+    width: 150px;
+    height: 30px !important;
+    text-transform: capitalize;
+    font-weight: normal;
+    font-size: 16px !important;
+    border: 1px solid #bfbfbf;
+    background: #e4e4e4
+  }
+  .admin_info{
+    margin: 0 10px;
+  }
+</style>

@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common';
-import { MarketModule } from './market/market.module';
+import { Module } from "@nestjs/common";
+import { MarketModule } from "./market/market.module";
 
 @Module({
   imports: [MarketModule],

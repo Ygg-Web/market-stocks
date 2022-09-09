@@ -3,7 +3,7 @@ import VueSocketIO from 'vue-socket.io';
 import Chartkick from 'vue-chartkick';
 import { Chart } from 'chart.js';
 import App from '@/App.vue';
-import router from '@/router';
+import router from '@/router/index';
 import store from '@/store';
 import vuetify from '@/plugins/vuetify';
 
