@@ -1,8 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Login from '@/components/login/Login.vue';
-import Admin from '@/components/admin/Admin.vue';
-import User from '@/components/user/User.vue';
 
 Vue.use(Router);
 
@@ -12,17 +9,17 @@ export default new Router({
     {
       path: '/',
       name: 'login',
-      component: Login,
+      component: () => import('../views/LoginView.vue'),
     },
     {
       path: '/admin',
       name: 'admin',
-      component: Admin,
+      component: () => import('../views/AdminView.vue'),
     },
     {
       path: '/user/:id',
       name: 'user',
-      component: User,
+      component: () => import('../views/UserView.vue'),
     },
   ],
 });

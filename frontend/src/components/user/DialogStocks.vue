@@ -1,42 +1,37 @@
 <template>
-  <v-row justify="center">
-    <v-dialog v-model="open" max-width="390">
+  <div>
+    <v-dialog v-model="open" max-width="370">
       <template v-slot:activator="{ on }">
         <v-btn
-            class="ma-3"
-            min-width="170"
-            color="info"
-            dark
-            @click="onClickOpen"
-        >{{ type === 'buy' ? 'Купить' : 'Продать' }}</v-btn>
+            color='info'
+            outlined
+            @click='open = true'
+        >{{type === 'buy' ? 'Купить' : 'Продать'}}</v-btn>
       </template>
-      <v-card align="center">
-        <v-card-title class="text-h5 justify-center">{{ type === 'buy' ? 'Покупка' : 'Продажа' }} акций</v-card-title>
-        <v-card-text>Сколько акций хотите {{ type === 'buy' ? 'приобрести' : 'продать' }}?</v-card-text>
-        <v-flex xs12 sm8>
+      <v-card align="center" class='p-4'>
+        <div class='pt-2'>Сколько акций хотите {{ type === 'buy' ? 'купить' : 'продать' }}?</div>
+        <v-flex sm10>
           <v-text-field
-              label="Количество"
+              v-model='count'
+              label='Введите количество'
               single-line
-              v-model="count"
+              type='number'
           ></v-text-field>
         </v-flex>
         <v-card-actions>
-          <v-spacer> </v-spacer>
-          <v-btn 
-              color="green darken-1" 
-              text 
-              @click="onClickClose"
+          <v-btn
+              outlined
+              @click='open = false'
           >Отмена</v-btn>
           <v-btn
               :disabled="!count"
-              color="green darken-1"
-              text
+              outlined
               @click="handleStart"
           >{{ type === 'buy' ? 'Купить' : 'Продать' }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -45,8 +40,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 @Component
 export default class extends Vue {
   @Prop(String) type!: string
-  @Prop(Function) onSell!: void
-  @Prop(Function) onBuy!: void
   @Prop(Number) max!: number
   @Prop(Number) stockId!: number
   @Prop(Number) price!: number
@@ -69,14 +62,6 @@ export default class extends Vue {
       this.$emit('onSell', {count, stockId: this.stockId, price: this.price})
       this.open = false
     }
-  }
-
-  onClickOpen() {
-    this.open = true
-  }
-
-  onClickClose() {
-    this.open = false
   }
 }
 </script>

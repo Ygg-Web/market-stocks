@@ -1,32 +1,28 @@
 <template>
-  <v-row justify="center">
+  <div>
     <v-dialog transition="dialog-top-transition" max-width="800">
       <template v-slot:activator="{ on, attrs }">
         <v-btn 
-            color="primary" 
+            color='info'
+            outlined
             v-bind="attrs"
-            v-on="on" 
-            max-width="170"
-        >Изменение цены</v-btn>
+            v-on="on"
+            width='40px'
+        ><v-icon>mdi-chart-bell-curve-cumulative</v-icon></v-btn>
       </template>
       <template v-slot:default="dialog">
-        <v-card>
-          <v-card-text>
-            <div class="text-h2 pt-10">
-              <area-chart :data="history"></area-chart>
-            </div>
-          </v-card-text>
-          <v-card-actions class="justify-end">
+        <v-card class='px-5 pt-7'>        
+          <area-chart :data="history"></area-chart>         
+          <v-card-actions class='justify-end px-0 pb-4'>
             <v-btn 
-                text 
-                @click="dialog.value = false" 
-                color="green" dark
+                outlined
+                @click='dialog.value = false'
             >Закрыть</v-btn>
           </v-card-actions>
         </v-card>
       </template>
     </v-dialog>
-  </v-row>
+  </div>
 </template>
 
 <script lang="ts">

@@ -44,7 +44,6 @@ export const mutations: MutationTree<MarketState> = {
   },
   CHANGE_PRICE_STOCKS(state, stocks: IStock[]) {
     state.stocks.map((stock: IStock) => {
-      // let date = new Date().toLocaleDateString();
       const time = new Date().toLocaleTimeString();
       stock.historyTime!.push(time);
       stock.historyPrice!.push(stocks[stock.id].price!);

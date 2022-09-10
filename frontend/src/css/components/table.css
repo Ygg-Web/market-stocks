@@ -1,0 +1,34 @@
+.v-data-table table {
+    border-collapse: collapse;
+}
+.v-data-table table tr:hover {
+    cursor: pointer;
+}
+.v-data-table table th,
+.v-data-table table td {
+    border:  1px solid #BFBFBF;
+}
+.v-data-table table td {
+    font-size: 16px !important;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.v-data-table .v-data-table-header {
+    background: #D9D9D9;
+}
+.v-data-table .v-data-table-header th {
+    white-space: nowrap;
+}
+.v-data-table-header th span {
+    font-size: 16px;
+    font-weight: normal;
+    color: #333;
+  }
+.v-data-table .v-data-table__wrapper {
+    border: 1px solid #BFBFBF;
+    overflow-y: auto;
+}
+.v-data-table > .v-data-table__wrapper > table > thead > tr:last-child > th {
+    white-space: break-spaces;
+}

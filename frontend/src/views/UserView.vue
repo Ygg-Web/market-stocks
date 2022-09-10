@@ -5,40 +5,39 @@
       <div class='user_header'>
         <div class='mx-2'><b>Данные брокера:</b></div>
         <div class='mr-2 my-2'><u>Брокер:</u> {{getAllUsers[userId].name}}</div>
-        <div class='mr-2'><u>Баланс:</u> {{ getAllUsers[userId].balance }} $</div>
-        <div class='mr-2'><u>Доходность(↑↓):</u> {{getAllUsers[userId].profit ? getAllUsers[userId].profit : '...'}} $</div>
+        <div class='mr-2'><u>Баланс:</u> {{getAllUsers[userId].balance}} $</div>
+        <div class='mr-2'><u>Доходность</u>(↑↓): {{getAllUsers[userId].profit ? getAllUsers[userId].profit : '...'}} $</div>
+      </div>
+      <div class="text-center mt-12">
+        <div>Текущая дата: {{dateCurrent}}</div>
+        <div v-if="getSettings.status === 'start'">Торги будут завершены: {{timeEndTrade}}</div>
+        <div v-else-if="getSettings.status === 'end'">Торги окончены</div>
       </div>
       <div class='user'>
-        <div class="pa-2">
-          <div>Текущая дата: {{ dateCurrent }}</div>
-          <div v-if="getSettings.status === 'start'">Торги будут завершены: {{ timeEndTrade }}</div>
-          <div v-else-if="getSettings.status === 'end'">Торги окончены</div>
-        </div>
-        <div>
-          <h3 class='text-center mt-2'>Текущий портфель акций:</h3>
-          <TableStocks
+        <div class='table_stocks'>
+          <div class='text-center'>Текущий портфель акций:</div>
+          <table-stocks
+              :stocks='stocksFilterForSell'
               type="sell"
-              :stocks="stocksFilterForSell"
               @onSell="onSell"
-          ></TableStocks>
+          ></table-stocks>
         </div>
-        <div>
-          <h3 class='text-center mt-2'>Биржа</h3>
-          <div class='text-center mt-2'>Акции доступные для покупки</div>
-          <TableStocks
-              v-if="getSettings.status === 'start'"
-              type="buy"
-              :stocks="stocksFilterForBuy"
-              @onBuy="onBuy"
-              :userBalance="getAllUsers[userId].balance"
-          ></TableStocks>
+        <div class='table_stocks'>
+          <div class='text-center'>Биржа:</div>
+          <div v-if="getSettings.status === 'start'">
+            <table-stocks
+                :stocks='stocksFilterForBuy'
+                :userBalance="getAllUsers[userId].balance"
+                type="buy"
+                @onBuy="onBuy"
+            ></table-stocks>
+          </div>
           <div
               v-else-if="getSettings.status == 'end'" 
-              class='text-center mt-2'
-          >Биржа закрыта, торги прекращены</div>
+              class='text-center'
+          >Биржа закрыта, торги прекращены</div> 
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -47,11 +46,11 @@
 import { ISettings, IStock, ITrade, IUser } from '@/types'
 import { Component, Vue } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
-import TableStocks from './TableStocks.vue'
+import TableStocks from '@/components/user/TableStocks.vue'
 
 @Component({
   components: {
-    TableStocks,
+    'table-stocks': TableStocks
   },
 })
 export default class extends Vue {
@@ -61,7 +60,6 @@ export default class extends Vue {
   @Getter('market/getAllUsers') getAllUsers!: IUser[]
   @Getter('market/getAllStocks') getAllStocks!: IStock[]
   @Getter('market/getSettings') getSettings!: ISettings
-
   userId: number = 0
   loading: boolean = true
   interval: any
@@ -101,10 +99,8 @@ export default class extends Vue {
   }
 
   getParseDate(value: string | null = null): string {
-    const d = value ? new Date(value) : new Date()
-    const date = d.toLocaleDateString()
-    const time = d.toLocaleTimeString()
-    return `${date}:${time}`
+    const date = value ? new Date(value) : new Date()
+    return `${date.toLocaleDateString()}:${date.toLocaleTimeString()}`
   }
 
   timerDate(): void {
@@ -120,27 +116,20 @@ export default class extends Vue {
   get stocksFilterForSell(): IStock[] | void {
     if (this.getAllUsers) {
       const user = this.getAllUsers[this.userId]
-      const userStocks = user.stocks
+      return user.stocks
         .filter((stock: IStock) => stock.count > 0)
         .map((stock: IStock) => {
           stock.name = this.getAllStocks[stock.id].name
           stock.price = this.getAllStocks[stock.id].price
+          stock.button = ''
           return stock
         })
-      return userStocks
     }
   }
 
   get stocksFilterForBuy(): IStock[] | void {
     if (this.getAllStocks) {
-      const stocks = this.getAllStocks.filter(
-        (stock: IStock) => stock.count > 0
-      );
-      // .map((stock: IStock) => {
-      //   stock.price = stock.price;
-      //   return stock;
-      // });
-      return stocks
+      return this.getAllStocks.filter((stock: IStock) => (stock.count > 0))
     }
   }
 
@@ -151,7 +140,8 @@ export default class extends Vue {
 </script>
 <style>
   .user{
-    padding-top: 50px;
+    display: flex;
+    justify-content: space-between;
     font-size: 16px;
   }
   .user_header{
@@ -164,5 +154,9 @@ export default class extends Vue {
     align-items: center;
     z-index: 100;
     font-size: 16px;
-  }  
+  } 
+  .table_stocks{
+    margin: 0 40px;
+    width: 800px;
+  }
 </style>

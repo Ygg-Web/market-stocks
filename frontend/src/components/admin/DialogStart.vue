@@ -1,50 +1,44 @@
 <template>
-  <v-row class="m-2">
-    <v-dialog v-model="open" max-width="400">
+  <div>
+    <v-dialog v-model="open" max-width="370">
       <template v-slot:activator="{ on }">
         <v-btn
-            min-width="150"
-            color="info"
-            dark
-            @click="onClickOpen"
-        >Начать торги</v-btn>
+            outlined
+            @click='open = true'
+        >Настройка</v-btn>
       </template>
       <v-card align='center'>
-        <v-card-title class="text-h6 justify-center">Настройки торгов</v-card-title>
-        <v-card-text>Введите данные торгов</v-card-text>
-        <v-flex xs12 sm8>
+        <div class='pt-2'>Введите данные торгов</div>
+        <v-flex sm10>
           <v-text-field
-              label="Интервал изменения цены"
-              type="number"
-              v-model="interval"
+              v-model='interval'
+              label='Интервал изменения цены'
+              type='number'
               single-line
           ></v-text-field>
-        </v-flex>
-        <v-flex xs12 sm8>
+          <span class='date'>Дата окончания торгов:</span>
           <v-text-field
-              label="Дата"
-              type="datetime-local"
-              v-model="date"
+          class='mt-0 pt-0'
+              v-model='dateEnd'
+              label='Дата'
+              type='datetime-local'
               single-line
           ></v-text-field>
-        </v-flex>
+        </v-flex>  
         <v-card-actions>
-          <v-spacer> </v-spacer>
           <v-btn 
-              color="green darken-1" 
-              @click="onClickClose"
-              text 
+              outlined
+              @click='open = false'
           >Отмена</v-btn>
           <v-btn
-              :disabled="!date || !interval"
-              color="green darken-1"
-              @click="handleStart"
-              text
-          >Начать торги</v-btn>
+              :disabled='!dateEnd || !interval'
+              outlined
+              @click='handleStart'
+          >Начать</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -54,39 +48,28 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class extends Vue {
   interval: number|null = null
   open: boolean = false
-  date: string = ''
-
+  dateEnd: string = ''
   handleStart(): void {
-    if (this.date && this.interval) {
-      if (this.interval > 5) {
-        const dateSet = new Date(this.date).getTime()
-        const dateCurrent = new Date().getTime()
-        const dateDif = dateSet - dateCurrent
-        const dateMounth = new Date(2592000000).getTime()
-        if (dateSet > dateCurrent && dateDif < dateMounth) {
-          const endTime = {
-            interval: Number(this.interval),
-            dateEnd: this.date,
-          };
-          this.$emit('onStartClick', endTime)
-          this.open = false
-        } else {
-          alert('Дата должна быть больше текущей и меньше месяца вперед')
-        }
+    if (this.interval && this.interval > 5) {
+      const dateSet = new Date(this.dateEnd).getTime()
+      const dateCurrent = new Date().getTime()
+      if (dateSet > dateCurrent) {
+        this.$emit('onStartClick', {interval: Number(this.interval), dateEnd: this.dateEnd,})
+        this.open = false
       } else {
-        alert('Интервал должен быть > 5')
+        alert('Дата должна быть больше текущей')
       }
     } else {
-      alert('Необходимо заполнить все поля')
+      alert('Интервал должен быть > 5')
     }
-  }
-
-  onClickOpen(): void {
-    this.open = true
-  }
-
-  onClickClose(): void {
-    this.open = false
   }
 }
 </script>
+<style>
+  .date{
+    margin: 10px 0 0;
+    text-align: start;
+    width: 100%;
+    display: block;
+  }
+</style>

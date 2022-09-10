@@ -29,6 +29,7 @@ export interface IStock {
   profit: number;
   historyPrice?: number[];
   historyTime?: string[];
+  button?: any;
 }
 
 export interface ITrade {

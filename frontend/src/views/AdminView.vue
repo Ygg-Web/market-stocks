@@ -4,9 +4,9 @@
     <div v-else='loading === false' class='admin'>
       <h3 class='text-center mt-2'>Панель андминистратора</h3>
       <div class='text-center mb-2'>Таблица пользователей:</div>
-      <table-users
+      <table-admin
           :users='updateUsers'
-      ></table-users>
+      ></table-admin>
       <div class='admin_header'>
         <div class='admin_info'><b>Управление торгами:</b></div>
         <div class='admin_info'>
@@ -14,14 +14,13 @@
           <div v-else-if="getSettings.status === 'start'">Торги будут завершены: {{timeEndTrade}}</div>
         </div>
         <div class='admin_controllers'>
-          <DialogStart 
+          <dialog-start 
               @onStartClick='onStartClick'
-          ></DialogStart>
+          ></dialog-start>
           <v-btn
-              class='admin_button'
-              color='error'
+              outlined
               @click='onEndClick'
-          >Конец торгов</v-btn>
+          >Остановить</v-btn>
         </div>
       </div>
     </div>
@@ -32,13 +31,13 @@
 import { ISettings, IStock, IUser, ISetDate } from '@/types'
 import { Component, Vue } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
-import DialogStart from './DialogStart.vue'
-import TableUsers from './TableUsers.vue'
+import DialogStart from '@/components/admin/DialogStart.vue'
+import TableAdmin from '@/components/admin/TableAdmin.vue'
 
 @Component({
   components: {
-    DialogStart,
-    'table-users': TableUsers
+    'dialog-start': DialogStart,
+    'table-admin': TableAdmin
   },
 })
 export default class extends Vue {
@@ -48,8 +47,6 @@ export default class extends Vue {
   @Getter('market/getAllUsers') getAllUsers!: IUser[]
   @Getter('market/getAllStocks') getAllStocks!: IStock[]
   @Getter('market/getSettings') getSettings!: ISettings
-
-  
   change: number = 0
   loading: boolean = true
 
@@ -58,7 +55,6 @@ export default class extends Vue {
     await (<any>this).fetchStocksDB()
     await (<any>this).fetchSettingsDB()
     this.loading = false
-
   }
 
   onStartClick(event: ISetDate): void {
@@ -85,8 +81,7 @@ export default class extends Vue {
   }
 
   get timeEndTrade(): string {
-    return `${new Date(
-      this.getSettings.dateEnd!).toLocaleDateString()}:${new Date(this.getSettings.dateEnd!).toLocaleTimeString()}`
+    return `${new Date(this.getSettings.dateEnd!).toLocaleDateString()}:${new Date(this.getSettings.dateEnd!).toLocaleTimeString()}`
   }
 }
 </script>
@@ -102,22 +97,13 @@ export default class extends Vue {
     background: #f5f5f5;
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     z-index: 100;
   }
   .admin_controllers{
     margin: 10px 0;
     display: flex;
     justify-content: space-between;
-  }
-  .admin_button{
-    margin: 0 10px;
-    width: 150px;
-    height: 30px !important;
-    text-transform: capitalize;
-    font-weight: normal;
-    font-size: 16px !important;
-    border: 1px solid #bfbfbf;
-    background: #e4e4e4
   }
   .admin_info{
     margin: 0 10px;

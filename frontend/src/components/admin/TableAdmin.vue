@@ -22,7 +22,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
-export default class TableUsers extends Vue {
+export default class TableAdmin extends Vue {
   @Prop(Array) users!: []
   headers: any[] = [
     { text: 'Брокер', value: 'name', width: '20%', sortable: false, align: 'center' },
@@ -37,32 +37,5 @@ export default class TableUsers extends Vue {
 .tableData {
   width: 800px;
   margin: 0 auto;
-}
-.tableData ::v-deep .v-data-table-header th {
-  font-size: 16px;
-  height: 30px;
-}
-.tableData ::v-deep .v-data-table-header th span {
-  font-size: 16px;
-  font-weight: normal;
-  color: #333;
-}
-.tableData ::v-deep tr.v-data-table__selected {
-  background: #b3d7ed !important;
-}
-.tableData ::v-deep .v-data-table tbody tr td {
-  font-size: 16px;
-  cursor: pointer;
-  height: 30px;
-}
-.tableData ::v-deep .primary--text:not(.v-label) {
-  color: #bfbfbf !important;
-}
-.tableData ::v-deep .v-data-table table tr.active {
-  background: #b3d7ed !important;
-  font-weight: normal;
-}
-.tableData ::v-deep .v-data-table table tr {
-  border-bottom:  none;
 }
 </style>

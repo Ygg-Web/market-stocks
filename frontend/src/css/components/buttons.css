@@ -1,0 +1,12 @@
+.v-btn {
+    margin: 0 10px;
+    width: 150px;
+    height: 30px !important;
+    font-weight: normal;
+    font-size: 16px !important;
+}
+.v-btn--outlined.theme--light {
+    text-transform: capitalize;
+    border: 1px solid #BFBFBF;
+    background: #E1E4E5;
+}

@@ -13,12 +13,10 @@
       </div>
       <div class='controllers'>
         <v-btn 
-            class='login_button'
             @click='login'
             outlined
         >Войти</v-btn>
         <v-btn 
-            class='login_button'
             @click='clear'
             outlined
         >Очистить</v-btn>
@@ -50,10 +48,7 @@ export default class extends Vue {
   }
 
   updateUsers(): void {
-    this.users = [
-      ...this.users,
-      ...this.getAllUsers.map((user: IUser) => user.login),
-    ]
+    this.users = [...this.users, ...this.getAllUsers.map((user: IUser) => user.login)]
   }
 
   login(): void {
@@ -125,14 +120,7 @@ export default class extends Vue {
   .controllers{
     margin-top: 5px;
   }
-  .login_button{
-    margin: 0 10px;
+  .login .v-btn{
     width: 115px;
-    height: 30px !important;
-    text-transform: capitalize;
-    font-weight: normal;
-    font-size: 16px !important;
-    border: 1px solid #bfbfbf;
-    background: #e4e4e4
   }
 </style>
