@@ -58,7 +58,7 @@ export default class TableUsers extends Vue {
   ]
   
   created(){
-    this.type === 'sell' && this.headers.splice(3, 0, { text: 'Доходность(↑↓)', value: 'profit', width: '20%', sortable: false, align: 'center' })
+    this.type === 'sell' && this.headers.splice(3, 0, { text: 'Прибыль(↑↓)', value: 'profit', width: '20%', sortable: false, align: 'center' })
   }
 }
 </script>
