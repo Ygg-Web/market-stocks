@@ -4,17 +4,17 @@
       "id": 0,
       "name": "Петров П.П.",
       "login": "petrov",
-      "balance": 432,
+      "balance": 725,
       "profit": 0,
       "stocks": [
         {
           "id": 0,
-          "count": 3,
+          "count": 8,
           "name": ""
         },
         {
           "id": 1,
-          "count": 7,
+          "count": 5,
           "name": ""
         },
         {
@@ -24,7 +24,7 @@
         },
         {
           "id": 3,
-          "count": 5,
+          "count": 3,
           "name": ""
         },
         {
@@ -38,22 +38,22 @@
       "id": 1,
       "name": "Иванов И.И.",
       "login": "ivanov",
-      "balance": 805,
+      "balance": 669,
       "profit": 0,
       "stocks": [
         {
           "id": 0,
-          "count": 76,
+          "count": 11,
           "name": ""
         },
         {
           "id": 1,
-          "count": 4,
+          "count": 5,
           "name": ""
         },
         {
           "id": 2,
-          "count": 8,
+          "count": 10,
           "name": ""
         },
         {
@@ -107,8 +107,8 @@
     {
       "id": 0,
       "name": "Yandex",
-      "price": 17,
-      "count": -4,
+      "price": 38,
+      "count": 56,
       "stepChange": 35,
       "historyPrice": [],
       "historyTime": []
@@ -116,8 +116,8 @@
     {
       "id": 1,
       "name": "Газпром",
-      "price": 17,
-      "count": 69,
+      "price": 10,
+      "count": 70,
       "stepChange": 15,
       "historyPrice": [],
       "historyTime": []
@@ -125,8 +125,8 @@
     {
       "id": 2,
       "name": "АЛРОСА",
-      "price": 10,
-      "count": 57,
+      "price": 26,
+      "count": 55,
       "stepChange": 20,
       "historyPrice": [],
       "historyTime": []
@@ -134,8 +134,8 @@
     {
       "id": 3,
       "name": "ВТБ",
-      "price": 33,
-      "count": 40,
+      "price": 43,
+      "count": 42,
       "stepChange": 35,
       "historyPrice": [],
       "historyTime": []
@@ -143,7 +143,7 @@
     {
       "id": 4,
       "name": "Сбербанк",
-      "price": 10,
+      "price": 28,
       "count": 42,
       "stepChange": 25,
       "historyPrice": [],
@@ -151,7 +151,8 @@
     }
   ],
   "settings": {
-    "dateEnd": "2022-09-11T17:05",
+    "dateStart": "2022-09-11T10:00",
+    "dateEnd": "2022-09-23T21:59",
     "interval": 7,
     "status": "start"
   }

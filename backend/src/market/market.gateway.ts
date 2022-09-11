@@ -89,7 +89,7 @@ export class MarketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     if (trade.count <= countStocksUser) {
       this.server.sockets.json.emit("sell", trade);
-      client.broadcast.json.emit("sell", trade);
+      // client.broadcast.json.emit("sell", trade);
 
       database.users[trade.sellerId].stocks[trade.stockId].count -= trade.count;
       database.users[trade.sellerId].balance += trade.price * trade.count;
@@ -105,7 +105,7 @@ export class MarketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     if (balanceUser >= trade.count * trade.price) {
       this.server.sockets.json.emit("buy", trade);
-      client.broadcast.emit("buy", trade);
+      // client.broadcast.emit("buy", trade);
 
       database.users[trade.buyerId].stocks[trade.stockId].count += trade.count;
       database.users[trade.buyerId].balance -= trade.price * trade.count;
